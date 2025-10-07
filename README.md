@@ -1,10 +1,10 @@
-# 💧 Hidratación Diaria
+# 💧 Hidrátate
 
 Una Progressive Web App (PWA) para ayudarte a mantener una hidratación saludable durante el día.
 
 ## 🎯 Descripción
 
-Hidratación Diaria es una aplicación web que te ayuda a cumplir tu meta diaria de consumo de agua. Calcula automáticamente cuánta agua debes beber según tu peso corporal y te envía recordatorios inteligentes durante el día.
+Hidrátate es una aplicación web que te ayuda a cumplir tu meta diaria de consumo de agua. Calcula automáticamente cuánta agua debes beber según tu peso corporal y te envía recordatorios inteligentes durante el día.
 
 ## ✨ Características
 
