@@ -28,6 +28,8 @@ Hidrátate es una aplicación web que te ayuda a cumplir tu meta diaria de consu
 
 Esta app puede instalarse en tu dispositivo móvil:
 
+https://josealberto13.github.io/Hidratate-PWA/
+
 - Abre la app en tu navegador
 - Toca el menú de opciones
 - Selecciona "Añadir a pantalla de inicio"

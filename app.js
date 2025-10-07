@@ -12,6 +12,8 @@ let glasses = [];
 let selectedPhoto = null;
 let reminderInterval = null;
 let nextGlassInterval = null;
+const waterPerGlass = 250; // ml
+const waterPerKg = 35; // ml
 
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
@@ -66,8 +68,8 @@ function saveSettings() {
     settings.weight = weight;
     settings.startTime = startTime;
     settings.endTime = endTime;
-    settings.goalMl = Math.round(weight * 35);
-    settings.goalGlasses = Math.ceil(settings.goalMl / 250);
+    settings.goalMl = Math.round(weight * waterPerKg);
+    settings.goalGlasses = Math.ceil(settings.goalMl / waterPerGlass);
 
     const [startH, startM] = startTime.split(':').map(Number);
     const [endH, endM] = endTime.split(':').map(Number);
@@ -171,7 +173,7 @@ function updateUI() {
     document.getElementById('progressBar').textContent = Math.round(percentage) + '%';
     document.getElementById('glassesCount').textContent = consumed;
     document.getElementById('glassesGoal').textContent = goal;
-    document.getElementById('mlConsumed').textContent = consumed * 250;
+    document.getElementById('mlConsumed').textContent = consumed * waterPerGlass;
     document.getElementById('mlGoal').textContent = settings.goalMl;
 
     // Mostrar mensaje de felicitación o tiempo del próximo vaso
@@ -329,7 +331,7 @@ function showReminder() {
     showToast('💧 ¡Hora de tomar un vaso de agua!', 'info');
 
     if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Hidratación Diaria', {
+        new Notification('Hidrátate 💧', {
             body: '¡Hora de tomar un vaso de agua!',
             icon: 'icon-192.png',
             vibrate: [200, 100, 200]
