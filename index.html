@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <title>Hidratación Diaria</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="bg-primary bg-gradient text-white text-center py-4 mb-4 shadow">
+        <div class="container">
+            <h1 class="display-5"><i class="fas fa-tint"></i> Hidratación Diaria</h1>
+            <p class="mb-0">Mantente saludable, mantente hidratado</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <!-- Vista de configuración inicial -->
+        <div id="setupView" style="display: none;">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <h3 class="text-center mb-4">Configuración Inicial</h3>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Peso corporal (kg)</label>
+                                <input type="number" id="weightInput" class="form-control form-control-lg" 
+                                       placeholder="Ej: 70" min="20" max="200">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Horario de recordatorios</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label small">Inicio</label>
+                                        <input type="time" id="startTime" class="form-control" value="08:00">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small">Fin</label>
+                                        <input type="time" id="endTime" class="form-control" value="22:00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="saveSettings()" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-check"></i> Guardar y Comenzar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista principal -->
+        <div id="mainView" style="display: none;">
+            <!-- Progreso -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-body text-center p-4">
+                    <h2 class="mb-3" id="glassesDisplay">
+                        <span id="glassesCount">0</span> / <span id="glassesGoal">0</span> vasos
+                    </h2>
+                    
+                    <div class="progress mb-3" style="height: 30px;">
+                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+                             role="progressbar" style="width: 0%">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-info text-dark fs-6 px-3 py-2">
+                            <i class="fas fa-tint"></i> <strong id="mlConsumed">0</strong> ml / <span id="mlGoal">0</span> ml
+                        </span>
+                    </div>
+
+                    <!-- Tiempo para próximo vaso o mensaje de felicitación -->
+                    <div id="nextGlassInfo" class="alert alert-info mb-3" style="display: none;">
+                        <i class="fas fa-clock"></i> <strong>Próximo vaso en: <span id="nextGlassTime"></span></strong>
+                    </div>
+
+                    <div id="congratsMessage" class="alert alert-success mb-3" style="display: none;">
+                        <h5 class="mb-0"><i class="fas fa-trophy"></i> ¡Felicitaciones! Completaste tu meta diaria 🎉</h5>
+                    </div>
+
+                    <button onclick="showAddGlassModal()" class="btn btn-primary btn-lg w-100 mb-2">
+                        <i class="fas fa-plus-circle"></i> Agregar Vaso
+                    </button>
+
+                    <button onclick="resetDay()" class="btn btn-warning w-100">
+                        <i class="fas fa-redo"></i> Reiniciar Día
+                    </button>
+                </div>
+            </div>
+
+            <!-- Historial de hoy -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-history"></i> Historial de Hoy
+                    </h5>
+                    <div id="todayHistory">
+                        <p class="text-muted text-center">Aún no has registrado vasos hoy</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-cog"></i> Configuración
+                    </h5>
+                    <button onclick="showSettings()" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-edit"></i> Editar Configuración
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar vaso -->
+    <div class="modal fade" id="addGlassModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Vaso de Agua</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center mb-3">¿Deseas agregar una foto del vaso?</p>
+                    
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handlePhotoSelected(event)" class="d-none">
+                    <input type="file" id="galleryInput" accept="image/*" onchange="handlePhotoSelected(event)" class="d-none">
+                    
+                    <button onclick="document.getElementById('cameraInput').click()" class="btn btn-primary w-100 mb-2">
+                        <i class="fas fa-camera"></i> Tomar Foto
+                    </button>
+                    
+                    <button onclick="document.getElementById('galleryInput').click()" class="btn btn-secondary w-100 mb-2">
+                        <i class="fas fa-images"></i> Seleccionar de Galería
+                    </button>
+                    
+                    <button onclick="addGlass(null)" class="btn btn-success w-100">
+                        <i class="fas fa-check"></i> Agregar Sin Foto
+                    </button>
+
+                    <div id="photoPreview" class="text-center mt-3" style="display: none;">
+                        <img id="previewImage" class="img-fluid rounded" style="max-height: 300px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver foto -->
+    <div class="modal fade" id="photoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Foto del Vaso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="fullPhoto" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este registro?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast para alertas -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+        <div id="toastContainer"></div>
+    </div>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+     <script src="app.js"></script>
+</body>
+</html>
