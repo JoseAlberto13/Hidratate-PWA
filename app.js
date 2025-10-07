@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     startReminderSystem();
     startNextGlassTimer();
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker registrado'))
-            .catch(err => console.log('Error en Service Worker:', err));
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js")
+            .then(() => console.log("✅ Service Worker registrado"))
+            .catch(err => console.error("❌ Error al registrar SW", err));
     }
 });
 
@@ -60,8 +60,8 @@ function saveSettings() {
     const startTime = document.getElementById('startTime').value;
     const endTime = document.getElementById('endTime').value;
 
-    if (!weight || weight < 20 || weight > 200) {
-        showToast('Por favor ingresa un peso válido (20-200 kg)', 'warning');
+    if (!weight || weight < 20 || weight > 300) {
+        showToast('Por favor ingresa un peso válido (20-300 kg)', 'warning');
         return;
     }
 

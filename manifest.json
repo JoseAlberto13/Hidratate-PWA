@@ -1,12 +1,10 @@
 {
-  "name": "Hidratación Diaria",
-  "short_name": "Hidratación",
-  "description": "App para seguimiento de hidratación diaria",
-  "start_url": "/",
+  "name": "Hidrátate - PWA",
+  "short_name": "Hidrátate",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#E3F2FD",
   "theme_color": "#2196F3",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
